@@ -7,6 +7,7 @@
 - **Description** : Crée un nouvel utilisateur (chauffeur ou admin).
 
 ### Body (JSON)
+
 ```json
 {
   "nom": "baalla",
@@ -18,6 +19,7 @@
 ```
 
 ### Réponse (succès)
+
 ```json
 {
   "message": "Utilisateur créé avec succès",
@@ -42,6 +44,7 @@
 - **Description** : Authentifie un utilisateur et retourne les tokens JWT.
 
 ### Body (JSON)
+
 ```json
 {
   "email": "baalla@example.com",
@@ -50,6 +53,7 @@
 ```
 
 ### Réponse (succès)
+
 ```json
 {
   "message": "Connexion réussie",
@@ -82,7 +86,6 @@
 
 ---
 
-
 # 🚛 Documentation API Camions
 
 ## 📋 Endpoints Camions
@@ -95,11 +98,13 @@
 - **Description** : Récupère la liste de tous les camions.
 
 **Headers** :
+
 ```
 Authorization: Bearer {accessToken}
 ```
 
 **Réponse (succès)** :
+
 ```json
 {
   "success": true,
@@ -136,14 +141,17 @@ Authorization: Bearer {accessToken}
 - **Authentification** : ✅ Requise (Admin)
 
 **Paramètres** :
+
 - `id` (string) : ID du camion
 
 **Headers** :
+
 ```
 Authorization: Bearer {accessToken}
 ```
 
 **Réponse (succès)** :
+
 ```json
 {
   "success": true,
@@ -167,12 +175,14 @@ Authorization: Bearer {accessToken}
 - **Description** : Ajoute un nouveau camion à la flotte.
 
 **Headers** :
+
 ```
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 ```
 
 **Body (JSON)** :
+
 ```json
 {
   "matricule": "AA-123-BB",
@@ -186,6 +196,7 @@ Content-Type: application/json
 ```
 
 **Réponse (succès - 201)** :
+
 ```json
 {
   "success": true,
@@ -208,6 +219,7 @@ Content-Type: application/json
 ```
 
 **Erreurs possibles** :
+
 - `400` : Champs manquants ou matricule déjà existant
 - `401` : Non authentifié
 - `403` : Non autorisé (pas admin)
@@ -221,15 +233,18 @@ Content-Type: application/json
 - **Authentification** : ✅ Requise (Admin)
 
 **Paramètres** :
+
 - `id` (string) : ID du camion à modifier
 
 **Headers** :
+
 ```
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 ```
 
 **Body (JSON)** - Tous les champs sont optionnels :
+
 ```json
 {
   "matricule": "AA-123-BB",
@@ -247,6 +262,7 @@ Content-Type: application/json
 ```
 
 **Réponse (succès)** :
+
 ```json
 {
   "success": true,
@@ -264,11 +280,13 @@ Content-Type: application/json
 - **Authentification** : ✅ Requise (Admin)
 
 **Headers** :
+
 ```
 Authorization: Bearer {accessToken}
 ```
 
 **Réponse (succès)** :
+
 ```json
 {
   "success": true,
@@ -286,6 +304,7 @@ Authorization: Bearer {accessToken}
 - **Authentification** : ✅ Requise (Admin)
 
 **Réponse (succès)** :
+
 ```json
 {
   "success": true,
@@ -304,12 +323,14 @@ Authorization: Bearer {accessToken}
 - **Description** : Met à jour le kilométrage après un trajet.
 
 **Headers** :
+
 ```
 Authorization: Bearer {accessToken}
 Content-Type: application/json
 ```
 
 **Body (JSON)** :
+
 ```json
 {
   "kilometrage": 155000
@@ -317,6 +338,7 @@ Content-Type: application/json
 ```
 
 **Réponse (succès)** :
+
 ```json
 {
   "success": true,
@@ -330,9 +352,11 @@ Content-Type: application/json
 ## 🧪 Tests avec Postman
 
 ### Collection Camions
+
 Créer une collection "TrackFlow - Camions" avec les requêtes suivantes :
 
 **1. Create Camion**
+
 ```
 POST http://localhost:5000/api/camions
 Headers: Authorization: Bearer {token}
@@ -340,18 +364,21 @@ Body: JSON (voir exemple ci-dessus)
 ```
 
 **2. Get All Camions**
+
 ```
 GET http://localhost:5000/api/camions
 Headers: Authorization: Bearer {token}
 ```
 
 **3. Get Camion by ID**
+
 ```
 GET http://localhost:5000/api/camions/675a1b2c3d4e5f6g7h8i
 Headers: Authorization: Bearer {token}
 ```
 
 **4. Update Camion**
+
 ```
 PUT http://localhost:5000/api/camions/675a1b2c3d4e5f6g7h8i
 Headers: Authorization: Bearer {token}
@@ -359,12 +386,14 @@ Body: JSON (champs à modifier)
 ```
 
 **5. Delete Camion**
+
 ```
 DELETE http://localhost:5000/api/camions/675a1b2c3d4e5f6g7h8i
 Headers: Authorization: Bearer {token}
 ```
 
 **6. Update Kilométrage**
+
 ```
 PATCH http://localhost:5000/api/camions/675a1b2c3d4e5f6g7h8i/kilometrage
 Headers: Authorization: Bearer {token}
@@ -375,15 +404,15 @@ Body: { "kilometrage": 155000 }
 
 ## 📊 Codes d'erreur
 
-| Code | Signification |
-|------|---------------|
-| 200 | OK (succès) |
-| 201 | Created (création réussie) |
-| 400 | Bad Request (données invalides) |
-| 401 | Unauthorized (pas d'authentification) |
-| 403 | Forbidden (accès refusé - pas admin) |
-| 404 | Not Found (camion non trouvé) |
-| 500 | Internal Server Error |
+| Code | Signification                         |
+| ---- | ------------------------------------- |
+| 200  | OK (succès)                           |
+| 201  | Created (création réussie)            |
+| 400  | Bad Request (données invalides)       |
+| 401  | Unauthorized (pas d'authentification) |
+| 403  | Forbidden (accès refusé - pas admin)  |
+| 404  | Not Found (camion non trouvé)         |
+| 500  | Internal Server Error                 |
 
 ---
 
@@ -393,3 +422,64 @@ Body: { "kilometrage": 155000 }
 - ✅ Autorisation par rôle (Admin pour CRUD)
 - ✅ Validation des données entrantes
 - ✅ Matricule unique
+
+---
+
+# 🚚 API Remorques
+
+## Auth
+
+Toutes les routes sont protégées par JWT.
+
+- Admin requis pour CRUD complet.
+- Chauffeur autorisé pour PATCH kilométrage.
+
+## Endpoints
+
+### GET /api/remorques
+
+- Rôle: admin
+- Réponse: `{ success, count, data[] }`
+
+### GET /api/remorques/:id
+
+- Rôle: admin
+
+### GET /api/remorques/actives
+
+- Rôle: admin
+
+### POST /api/remorques
+
+- Rôle: admin
+- Body:
+
+```json
+{
+  "matricule": "RR-123-BB",
+  "marque": "Schmitz",
+  "modele": "S.CS",
+  "type": "fourgon",
+  "capaciteCharge": 28000,
+  "anneeFabrication": 2021,
+  "remarques": "OK"
+}
+```
+
+### PUT /api/remorques/:id
+
+- Rôle: admin
+- Body: champs à remplacer
+
+### PATCH /api/remorques/:id/kilometrage
+
+- Rôle: chauffeur ou admin
+- Body:
+
+```json
+{ "kilometrage": 120000 }
+```
+
+### DELETE /api/remorques/:id
+
+- Rôle: admin

@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
 import camionRoutes from './routes/camionRoutes.js';
-
+import remorqueRoutes from './routes/remorqueRoutes.js';
 const app = express();
 
 app.use(cors());
@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/camions', camionRoutes);
+app.use('/api/remorques', remorqueRoutes);
 // app.use('/api/users', userRoutes);
 // app.use('/api/projects', projectRoutes);
 
