@@ -1,8 +1,5 @@
 import Camion from '../models/camionModel.js';
 
-// @desc    Obtenir tous les camions
-// @route   GET /api/camions
-// @access  Private/Admin
 export const getAllCamions = async (req, res) => {
     try {
         const camions = await Camion.find().sort({ createdAt: -1 });
@@ -17,9 +14,6 @@ export const getAllCamions = async (req, res) => {
     }
 };
 
-// @desc    Obtenir un camion par ID
-// @route   GET /api/camions/:id
-// @access  Private/Admin
 export const getCamionById = async (req, res) => {
     try {
         const camion = await Camion.findById(req.params.id);
@@ -40,9 +34,6 @@ export const getCamionById = async (req, res) => {
     }
 };
 
-// @desc    Créer un nouveau camion
-// @route   POST /api/camions
-// @access  Private/Admin
 export const createCamion = async (req, res) => {
     try {
         const {
@@ -94,9 +85,6 @@ export const createCamion = async (req, res) => {
     }
 };
 
-// @desc    Modifier un camion
-// @route   PUT /api/camions/:id
-// @access  Private/Admin
 export const updateCamion = async (req, res) => {
     try {
         const { id } = req.params;
@@ -138,9 +126,6 @@ export const updateCamion = async (req, res) => {
     }
 };
 
-// @desc    Supprimer un camion
-// @route   DELETE /api/camions/:id
-// @access  Private/Admin
 export const deleteCamion = async (req, res) => {
     try {
         const camion = await Camion.findByIdAndDelete(req.params.id);
@@ -162,9 +147,6 @@ export const deleteCamion = async (req, res) => {
     }
 };
 
-// @desc    Obtenir les camions actifs uniquement
-// @route   GET /api/camions/actifs
-// @access  Private/Admin
 export const getCamionsActifs = async (req, res) => {
     try {
         const camions = await Camion.find({ estActif: true }).sort({ createdAt: -1 });
@@ -179,9 +161,6 @@ export const getCamionsActifs = async (req, res) => {
     }
 };
 
-// @desc    Mettre à jour le kilométrage
-// @route   PATCH /api/camions/:id/kilometrage
-// @access  Private/Chauffeur
 export const updateKilometrage = async (req, res) => {
     try {
         const { kilometrage } = req.body;
