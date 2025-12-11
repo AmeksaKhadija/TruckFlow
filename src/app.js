@@ -5,6 +5,7 @@ import camionRoutes from './routes/camionRoutes.js';
 import remorqueRoutes from './routes/remorqueRoutes.js';
 import pneuRoutes from './routes/pneuRoutes.js';
 import trajetRoutes from './routes/trajetRoutes.js';
+import regleMaintenanceRoutes from './routes/regleMaintenanceRoutes.js';
 const app = express();
 
 app.use(cors());
@@ -18,7 +19,7 @@ app.use('/api/camions', camionRoutes);
 app.use('/api/remorques', remorqueRoutes);
 app.use('/api/pneus', pneuRoutes);
 app.use('/api/trajets', trajetRoutes);
-
+app.use('/api/regles-maintenance', regleMaintenanceRoutes);
 // Error handler
 app.use((err, req, res, next) => {
     console.error(err.stack);
