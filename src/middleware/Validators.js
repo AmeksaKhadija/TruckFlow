@@ -62,3 +62,29 @@ export const updateStatutSchema = Joi.object({
     remarques: Joi.string().trim().allow('').optional(),
 });
 
+export const createRegleMaintenanceSchema = Joi.object({
+    typeEntretien: Joi.string()
+        .valid('vidange', 'pneus', 'revision', 'freins', 'technique', 'autre')
+        .required()
+        .messages({
+            'any.only': 'Type invalide (vidange, pneus, revision, freins, technique, autre)',
+            'any.required': "Le type d'entretien est requis",
+        }),
+    categorieVehicule: Joi.string().valid('Camion', 'Remorque').required(),
+    intervalleKm: Joi.number().min(0).allow(null).optional(),
+    intervalleTempsMois: Joi.number().min(0).allow(null).optional(),
+    seuilAlerteKm: Joi.number().min(0).default(1000),
+    seuilAlerteMois: Joi.number().min(0).default(1),
+    description: Joi.string().allow('').optional(),
+}).or('intervalleKm', 'intervalleTempsMois');
+
+export const updateRegleMaintenanceSchema = Joi.object({
+    typeEntretien: Joi.string().valid('vidange', 'pneus', 'revision', 'freins', 'technique', 'autre').optional(),
+    categorieVehicule: Joi.string().valid('Camion', 'Remorque').optional(),
+    intervalleKm: Joi.number().min(0).allow(null).optional(),
+    intervalleTempsMois: Joi.number().min(0).allow(null).optional(),
+    seuilAlerteKm: Joi.number().min(0).optional(),
+    seuilAlerteMois: Joi.number().min(0).optional(),
+    description: Joi.string().allow('').optional(),
+});
+
