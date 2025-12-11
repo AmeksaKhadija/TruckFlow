@@ -36,12 +36,38 @@ export const protect = async (req, res, next) => {
 
 // Middleware de vérification du rôle
 export const authorize = (...roles) => {
-    return (req, res, next) => {
+    return (req, res, next) => {  // ✅ DOIT retourner cette fonction
+        if (!req.user) {
+            return res.status(401).json({ message: 'Non authentifié' });
+        }
         if (!roles.includes(req.user.role)) {
-            return res.status(403).json({
-                message: 'Accès non autorisé pour ce rôle',
+            return res.status(403).json({ message: 'Accès refusé' });
+        }
+        next();  // ✅ DOIT appeler next()
+    };
+};
+
+
+export const validate = (schema) => {
+    console.log('✅ validate() a été appelé avec le schéma:', schema !== undefined);
+
+    return (req, res, next) => {
+        console.log('✅ Middleware de validation exécuté');
+        console.log('📝 Body reçu:', req.body);
+
+        const { error } = schema.validate(req.body, { abortEarly: false });
+
+        if (error) {
+            const errors = error.details.map((detail) => detail.message);
+            console.log('❌ Erreurs de validation:', errors);
+            return res.status(400).json({
+                success: false,
+                message: 'Validation échouée',
+                errors,
             });
         }
+
+        console.log('✅ Validation réussie, appel de next()');
         next();
     };
 };
