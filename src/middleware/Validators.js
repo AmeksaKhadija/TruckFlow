@@ -50,14 +50,25 @@ export const updateStatutSchema = Joi.object({
         'any.only': 'Le statut doit être: a_faire, en_cours ou termine',
         'any.required': 'Le statut est requis',
     }),
+    kmDepart: Joi.when('statut', {
+        is: 'en_cours',
+        then: Joi.number().min(0).optional(),
+        otherwise: Joi.forbidden()
+    }),
     kmArrivee: Joi.when('statut', {
         is: 'termine',
         then: Joi.number().min(0).required().messages({
             'any.required': 'Le kilométrage d\'arrivée est requis pour terminer le trajet',
         }),
-        otherwise: Joi.number().min(0).optional(),
+        otherwise: Joi.forbidden()
     }),
-    volumeGasoil: Joi.number().min(0).optional(),
+    volumeGasoil: Joi.when('statut', {
+        is: 'termine',
+        then: Joi.number().min(0).required().messages({
+            'any.required': 'Le volume de gasoil est requis pour terminer le trajet',
+        }),
+        otherwise: Joi.forbidden()
+    }),
     dateArrivee: Joi.date().optional(),
     remarques: Joi.string().trim().allow('').optional(),
 });

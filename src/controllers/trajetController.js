@@ -186,93 +186,71 @@ export const updateTrajet = async (req, res) => {
     }
 };
 
-// PATCH /api/trajets/:id/statut - Mettre à jour le statut
 export const updateStatut = async (req, res) => {
     try {
         const { id } = req.params;
-        const { statut, kmArrivee, volumeGasoil, dateArrivee, remarques } = req.body;
+        const { statut, kmDepart, kmArrivee, volumeGasoil, dateArrivee, remarques } = req.body;
 
         const trajet = await Trajet.findById(id);
 
         if (!trajet) {
-            return res.status(404).json({
-                success: false,
-                message: 'Trajet non trouvé',
-            });
+            return res.status(404).json({ success: false, message: 'Trajet non trouvé' });
         }
 
-        // Vérifier la transition de statut
-        if (statut === 'en_cours' && trajet.statut !== 'a_faire') {
-            return res.status(400).json({
-                success: false,
-                message: 'Seul un trajet "à faire" peut passer en "en cours"',
-            });
-        }
+        if (statut === 'en_cours') {
+            if (trajet.statut !== 'a_faire') {
+                return res.status(400).json({ success: false, message: 'Trajet déjà démarré ou terminé' });
+            }
 
-        if (statut === 'termine' && trajet.statut !== 'en_cours') {
-            return res.status(400).json({
-                success: false,
-                message: 'Seul un trajet "en cours" peut être terminé',
-            });
+            if (kmDepart) {
+                trajet.kmDepart = kmDepart;
+            }
+            trajet.dateDepart = new Date();
         }
-
-        // Mettre à jour le statut
-        trajet.statut = statut;
 
         if (statut === 'termine') {
-            if (!kmArrivee) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Le kilométrage d\'arrivée est requis pour terminer le trajet',
-                });
+            if (trajet.statut !== 'en_cours') {
+                return res.status(400).json({ success: false, message: 'Le trajet doit être en cours pour être terminé' });
             }
 
             if (kmArrivee <= trajet.kmDepart) {
                 return res.status(400).json({
                     success: false,
-                    message: 'Le kilométrage d\'arrivée ne peut pas être inférieur au kilométrage de départ',
+                    message: `Le kilométrage d'arrivée (${kmArrivee}) doit être supérieur au départ (${trajet.kmDepart})`
                 });
             }
 
             trajet.kmArrivee = kmArrivee;
+            trajet.volumeGasoil = volumeGasoil;
             trajet.dateArrivee = dateArrivee || new Date();
-            trajet.volumeGasoil = volumeGasoil || 0;
 
-            // Mettre à jour le kilométrage du camion
             await Camion.findByIdAndUpdate(trajet.camionId, {
-                kilometrage: kmArrivee,
+                kilometrage: kmArrivee
             });
 
-            // Mettre à jour le kilométrage de la remorque si présente
             if (trajet.remorqueId) {
                 await Remorque.findByIdAndUpdate(trajet.remorqueId, {
-                    kilometrage: kmArrivee,
+                    kilometrage: kmArrivee
                 });
             }
         }
 
-        if (remarques) {
-            trajet.remarques = remarques;
-        }
+        trajet.statut = statut;
+        if (remarques) trajet.remarques = remarques;
 
         await trajet.save();
-
-        const updatedTrajet = await Trajet.findById(id)
-            .populate('chauffeurId', 'nom prenom email')
-            .populate('camionId', 'matricule marque modele')
-            .populate('remorqueId', 'matricule marque modele');
 
         res.status(200).json({
             success: true,
             message: `Trajet passé en ${statut}`,
-            data: updatedTrajet,
+            data: trajet,
         });
+
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
 };
 
-// DELETE /api/trajets/:id - Supprimer un trajet
 export const deleteTrajet = async (req, res) => {
     try {
         const trajet = await Trajet.findByIdAndDelete(req.params.id);
