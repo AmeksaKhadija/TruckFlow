@@ -7,6 +7,7 @@ import pneuRoutes from './routes/pneuRoutes.js';
 import trajetRoutes from './routes/trajetRoutes.js';
 import regleMaintenanceRoutes from './routes/regleMaintenanceRoutes.js';
 import maintenanceRoutes from './routes/maintenanceRoutes.js';
+import userRoutes from './routes/userRoutes.js'; 
 
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes); 
 app.use('/api/camions', camionRoutes);
 app.use('/api/remorques', remorqueRoutes);
 app.use('/api/pneus', pneuRoutes);
