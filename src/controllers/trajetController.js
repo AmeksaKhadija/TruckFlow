@@ -40,7 +40,7 @@ export const getTrajetsByChauffeur = async (req, res) => {
         const { chauffeurId } = req.params;
 
         const trajets = await Trajet.find({ chauffeurId })
-            .populate('camionId', 'matricule marque modele')
+            .populate('camionId', 'matricule marque modele kilometrage')
             .populate('remorqueId', 'matricule marque modele')
             .sort({ dateDepart: -1 });
 
